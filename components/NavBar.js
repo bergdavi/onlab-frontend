@@ -1,4 +1,3 @@
-import $ from 'jquery';
 import React from 'react';
 import {
     Collapse,
@@ -11,12 +10,10 @@ import {
     UncontrolledDropdown,
     DropdownToggle,
     DropdownMenu,
-    DropdownItem,
-    NavbarText,
-    Button
+    DropdownItem
 } from 'reactstrap';
-import LoginModal from './LoginModal';
-import './NavBar.css';
+import LoginNavItem from './LoginNavItem';
+import {UserContext} from '../components/UserContext';
 
 class NavBar extends React.Component {
 
@@ -29,38 +26,6 @@ class NavBar extends React.Component {
 
     toggle = () => {
         this.setState({isOpen: !this.state.isOpen});
-    }
-
-    // TODO move logIn and logOut functions to the same class
-    logout = () => {
-        $.post("/api/game-service/v1/users/logout").then(
-            () => {
-                this.props.userUpdated(undefined);
-            }).catch(
-            () => {
-                this.props.userUpdated(undefined);
-            }
-        );
-    }
-
-    loginButton = () => {
-        let login;
-        let text;
-        if(this.props.user) {
-            login = <Button onClick={this.logout} color="danger">Logout</Button>
-            text = `Logged in as ${this.props.user.user.username}`
-        } else {            
-            login = <LoginModal userUpdated={this.props.userUpdated}></LoginModal>
-            text = `User not logged in`
-        }
-        return (
-            <Nav right navbar>
-                <NavbarText className="NavBarText">{text}</NavbarText>
-                <NavItem>
-                    {login}
-                </NavItem>
-            </Nav>
-        );
     }
 
     render() {
@@ -94,7 +59,11 @@ class NavBar extends React.Component {
                             </DropdownMenu>
                         </UncontrolledDropdown>
                     </Nav>                    
-                    {this.loginButton()}                    
+                    <Nav>
+                        <UserContext.Consumer>
+                            {({user, updateUser}) => (<LoginNavItem user={user} updateUser={updateUser}/>)}
+                        </UserContext.Consumer>
+                    </Nav>
                 </Collapse>
             </Navbar>
         );
