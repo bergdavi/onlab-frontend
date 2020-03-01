@@ -7,6 +7,8 @@ class GameWrapper extends React.Component {
 
     constructor(props) {
         super(props);
+        console.log("props");
+        console.log(props);
         this.state = {};
     }
 
@@ -19,21 +21,31 @@ class GameWrapper extends React.Component {
         } else {
             return null;
         }
-    }   
+    }
+
+    updateComponent = async () => {
+        let gameplay = await this.getGameplay(this.props.gameplayId);
+        if(gameplay) {
+            let gameId = gameplay.game.id;
+            let gameState = JSON.parse(gameplay.gameState);
+            import(`./games/${gameId}`).then(({default: componentClass}) => {
+                this.setState({
+                    componentClass: componentClass,
+                    gameState: gameState
+                });
+            });    
+        }
+    }
+
+    componentDidMount() {
+        this.updateComponent()
+    }
 
     async componentDidUpdate(previousProps) {
-        if(previousProps && this.props.gameplayId && previousProps.gameplayId !== this.props.gameplayId) {
-            let gameplay = await this.getGameplay(this.props.gameplayId);
-            if(gameplay) {
-                let gameId = gameplay.game.id;
-                let gameState = JSON.parse(gameplay.gameState);
-                import(`./games/${gameId}`).then(({default: componentClass}) => {
-                    this.setState({
-                        componentClass: componentClass,
-                        gameState: gameState
-                    });
-                });    
-            }
+        console.log("update");
+        console.log(previousProps);
+        if(!previousProps || (this.props.gameplayId && previousProps.gameplayId !== this.props.gameplayId)) {
+            this.updateComponent();
         }
     }
 

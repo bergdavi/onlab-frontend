@@ -2,14 +2,17 @@ import { useRouter } from 'next/router'
 import {
     Col, Row
 } from 'reactstrap';
-import SecurePage from '../../components/util/SecurePage'
-import UserContextWrapper from '../../components/util/UserContextWrapper';
-import GameWrapper from '../../components/game/GameWrapper'
-import UserGameplayList from '../../components/game/UserGameplayList'
+import SecurePage from '../components/util/SecurePage'
+import UserContextWrapper from '../components/util/UserContextWrapper';
+import GameWrapper from '../components/game/GameWrapper'
+import UserGameplayList from '../components/game/UserGameplayList'
 
 const Game = () => {    
     const router = useRouter();
     const { gameplayId } = router.query;
+
+    console.log("gameplayId");
+    console.log(router.query);
 
     return (
         <main>

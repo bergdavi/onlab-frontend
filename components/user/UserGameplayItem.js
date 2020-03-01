@@ -8,7 +8,8 @@ class UserGameplayList extends React.Component {
 
     onItemClick = () => {
         let gameplayId = this.props.userGameplay.gameplay.id;
-        Router.push(`/gameplay/${gameplayId}`);
+        // Router.push(`/gameplays`, `/gameplays?gameplayId=${gameplayId}`, {shallow: false});
+        Router.push(`/gameplays?gameplayId=${gameplayId}`, `/gameplays?gameplayId=${gameplayId}`, {shallow: true});
     }
 
     render() {
