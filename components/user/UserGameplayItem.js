@@ -16,7 +16,6 @@ class UserGameplayList extends React.Component {
         let game = gameplay.game;
             
         return (
-
             <Card key={gameplay.id} onClick={this.onItemClick} style={{backgroundColor: gameplay.status === "finished" ? "gray" : "white"}}>
                 <div className="cardContainer">
                     <img src="https://via.placeholder.com/300x150"></img>
