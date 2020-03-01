@@ -108,17 +108,17 @@ class LoginNavItem extends React.Component {
 
 
         if(this.props.user) {
-            loginButton = <Button onClick={this.submitLogout} color="danger">Logout</Button>
+            loginButton = <Button onClick={this.submitLogout} color="danger" style={{marginRight: "15px"}}>Logout</Button>
             loginText = `Logged in as ${this.getUserDetails().username}`;
         } else {
-            loginButton = <Button id="loginButton" color="primary" onClick={this.toggleLoginModal}>Login</Button>
-            registerButton = <Button id="registerButton" color="secondary" onClick={this.toggleRegisterModal}>Register</Button>
+            loginButton = <Button id="loginButton" color="primary" onClick={this.toggleLoginModal} style={{marginRight: "15px"}}>Login</Button>
+            registerButton = <Button id="registerButton" color="secondary" onClick={this.toggleRegisterModal} style={{marginRight: "15px"}}>Register</Button>
             loginText = `User not logged in`;
         }
 
         return (
             <div>
-                <NavbarText>{loginText}</NavbarText>
+                <NavbarText style={{marginRight: "15px"}}>{loginText}</NavbarText>
                 {loginButton}
                 {registerButton}
                 <Modal isOpen={this.state.isLoginModalOpen} toggle={this.toggleLoginModal}>
