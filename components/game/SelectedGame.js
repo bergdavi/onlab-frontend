@@ -3,6 +3,7 @@ import {
     Card, Row, CardImg, CardBody, CardTitle, CardText, Button, Col
 } from 'reactstrap';
 import Router from 'next/router';
+import Constants from '../util/constants'
 
 class SelectedGame extends React.Component {
 
@@ -12,7 +13,7 @@ class SelectedGame extends React.Component {
     }
 
     onJoinQueue = async () => {
-        const res = await fetch(`/api/game-service/v1/games/${this.props.game.id}/queue`, {
+        const res = await fetch(`${Constants.api.pathPrefix}/games/${this.props.game.id}/queue`, {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json'

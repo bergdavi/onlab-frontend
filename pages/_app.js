@@ -5,6 +5,7 @@ import Cookies from 'js-cookie';
 import {UserContext} from '../components/util/UserContext';
 import Head from 'next/head'
 import NavBar from '../components/navbar/NavBar';
+import Constants from '../components/util/constants'
 
 
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -27,7 +28,7 @@ class MyApp extends App {
         if(false && Cookies.get('checkedLogin') && typeof user === 'object' && user) {
             this.updateUser(JSON.parse(localStorage.getItem('user')));
         } else {
-            const res = await fetch("/api/game-service/v1/users/current");
+            const res = await fetch(`${Constants.api.pathPrefix}/users/current`);
             if(res.status === 200) {
                 const user = await res.json();
                 this.updateUser(user);

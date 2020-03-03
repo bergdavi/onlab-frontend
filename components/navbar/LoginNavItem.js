@@ -8,8 +8,10 @@ import {
     FormGroup,
     Label,
     Input,
-    NavbarText
+    NavbarText,
+    Spinner
 } from 'reactstrap';
+import Constants from '../util/constants'
 
 class LoginNavItem extends React.Component {
 
@@ -49,7 +51,7 @@ class LoginNavItem extends React.Component {
             username: this.state.loginUsernameInput,
             password: this.state.loginPasswordInput
         });
-        const res = await fetch("/api/game-service/v1/users/login", {
+        const res = await fetch(`${Constants.api.pathPrefix}/users/login`, {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json'
@@ -74,7 +76,7 @@ class LoginNavItem extends React.Component {
             email: this.state.registerEmailInput,
             password: this.state.registerPasswordInput
         });
-        const res = await fetch("/api/game-service/v1/users/register", {
+        const res = await fetch(`${Constants.api.pathPrefix}/users/register`, {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json'
@@ -87,7 +89,7 @@ class LoginNavItem extends React.Component {
     }
 
     submitLogout = async () => {
-        const res = await fetch("/api/game-service/v1/users/logout", {
+        const res = await fetch(`${Constants.api.pathPrefix}/users/logout`, {
             method: "POST"
         });
         this.props.updateUser(null);
@@ -133,7 +135,10 @@ class LoginNavItem extends React.Component {
                                 <Label for="loginPassword">Password</Label>
                                 <Input type="password" onChange={(e) => this.setState({loginPasswordInput: e.target.value})} value={this.state.loginPasswordInput} name="password" id="loginPassword" placeholder="Password" />
                             </FormGroup>
-                            <Button color="primary" type="submit">Login</Button>
+                            <Button color="primary" type="submit">
+                                Login
+                                {/* <Spinner animation="grow" /> */}
+                            </Button>
                         </Form>
                     </ModalBody>
                 </Modal>

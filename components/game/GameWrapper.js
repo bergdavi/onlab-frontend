@@ -2,6 +2,7 @@ import React from 'react';
 import {
     Card, Row
 } from 'reactstrap';
+import Constants from '../util/constants'
 
 class GameWrapper extends React.Component {
 
@@ -13,7 +14,7 @@ class GameWrapper extends React.Component {
     }
 
     getGameplay = async (gameplayId) => {
-        const res = await fetch(`/api/game-service/v1/gameplays/${gameplayId}`);
+        const res = await fetch(`${Constants.api.pathPrefix}/gameplays/${gameplayId}`);
         if(res.status === 200) {
             console.log("is 200");
             const gameplay = await res.json();
@@ -53,7 +54,7 @@ class GameWrapper extends React.Component {
         console.log("Sending turn...");
         console.log(gameTurn);
         gameTurn = JSON.stringify(gameTurn);
-        const res = await fetch(`/api/game-service/v1/gameplays/${this.props.gameplayId}/playturn`, {
+        const res = await fetch(`${Constants.api.pathPrefix}/gameplays/${this.props.gameplayId}/playturn`, {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json'

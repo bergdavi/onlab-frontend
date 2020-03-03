@@ -2,6 +2,7 @@ import React from 'react';
 import UserGameplayItem from './UserGameplayItem'
 import GameItem from './GameItem';
 import SelectedGame from './SelectedGame';
+import Constants from '../util/constants'
 
 class GameList extends React.Component {
 
@@ -13,7 +14,7 @@ class GameList extends React.Component {
     }
 
     getGames = async () => {
-        const res = await fetch(`/api/game-service/v1/games`);
+        const res = await fetch(`${Constants.api.pathPrefix}/games`);
         if(res.status === 200) {
             const games = await res.json();
             this.setState({games : games});
