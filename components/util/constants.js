@@ -1,5 +1,5 @@
 export default {
     api: {
-        pathPrefix: '/game-service/v1'
+        pathPrefix: '/api/game-service/v1'
     }
 };

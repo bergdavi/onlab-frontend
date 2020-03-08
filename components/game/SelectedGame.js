@@ -23,8 +23,8 @@ class SelectedGame extends React.Component {
             const queuePlace = await res.text();
             this.setState({queuePlace: queuePlace});
         } else {
-            console.log("Bad turn");
-            // TODO proper turn handling
+            console.log("Failed to join");
+            // TODO proper error handling
         }
     }
 

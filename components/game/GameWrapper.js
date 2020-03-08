@@ -2,21 +2,19 @@ import React from 'react';
 import {
     Card, Row
 } from 'reactstrap';
+import { Client, Message } from '@stomp/stompjs';
 import Constants from '../util/constants'
 
 class GameWrapper extends React.Component {
 
     constructor(props) {
         super(props);
-        console.log("props");
-        console.log(props);
         this.state = {};
     }
 
     getGameplay = async (gameplayId) => {
         const res = await fetch(`${Constants.api.pathPrefix}/gameplays/${gameplayId}`);
         if(res.status === 200) {
-            console.log("is 200");
             const gameplay = await res.json();
             return gameplay;
         } else {
@@ -25,6 +23,10 @@ class GameWrapper extends React.Component {
     }
 
     updateComponent = async () => {
+        if(!this.props.gameplayId) {
+            return;
+        }
+        this.openSocket(this.props.gameplayId);
         let gameplay = await this.getGameplay(this.props.gameplayId);
         if(gameplay) {
             let gameId = gameplay.game.id;
@@ -34,7 +36,23 @@ class GameWrapper extends React.Component {
                     componentClass: componentClass,
                     gameState: gameState
                 });
-            });    
+            });
+        }
+    }
+
+    openSocket = (gameplayId) => {
+        if(this.client) {
+            this.client.deactivate();
+        } else {
+            this.client = new Client();
+        }        
+        // TODO server prefix?
+        this.client.brokerURL = `ws://${window.location.host}/ws/gameplay`;
+        this.client.activate();
+        this.client.onConnect = () => {
+            this.client.subscribe(`/user/topic/gameplay/${gameplayId}`, (message) => {
+                this.receivedState(JSON.parse(message.body));
+            });
         }
     }
 
@@ -43,31 +61,18 @@ class GameWrapper extends React.Component {
     }
 
     async componentDidUpdate(previousProps) {
-        console.log("update");
-        console.log(previousProps);
         if(!previousProps || (this.props.gameplayId && previousProps.gameplayId !== this.props.gameplayId)) {
             this.updateComponent();
         }
     }
 
+    receivedState = (gameState) => {
+        this.setState({gameState: gameState});
+    }
+
     sendTurn = async (gameTurn) => {
-        console.log("Sending turn...");
-        console.log(gameTurn);
         gameTurn = JSON.stringify(gameTurn);
-        const res = await fetch(`${Constants.api.pathPrefix}/gameplays/${this.props.gameplayId}/playturn`, {
-            method: "POST",
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: gameTurn
-        });
-        if(res.status === 200) {
-            const gameState = await res.json();
-            this.setState({gameState: gameState});
-        } else {
-            console.log("Bad turn");
-            // TODO proper turn handling
-        }
+        this.client.publish({destination: `/app/gameplay/${this.props.gameplayId}`, body: gameTurn});
     }
 
     render() {        
@@ -80,17 +85,7 @@ class GameWrapper extends React.Component {
         return (
             <div>
                 {/* TODO pass userIdx to the game */}
-                <GameComponent gameState={this.state.gameState} sendTurn={this.sendTurn}></GameComponent>
-                <style jsx>{`
-                    h1 {
-                        font-size: 20px;
-                        margin-bottom: 0;
-                    }
-                    
-                    h2 {
-                        font-size: 16px;
-                    }
-                `}</style>
+                <GameComponent gameState={this.state.gameState} sendTurn={this.sendTurn} style={{width: "100%", height: "100%"}}></GameComponent>
             </div>
         );        
     }

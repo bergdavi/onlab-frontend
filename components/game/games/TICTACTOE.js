@@ -14,7 +14,6 @@ export default class TicTacToe extends React.Component {
         let char = " ";
         if(c === 0) char = "X";
         if(c === 1) char = "0";
-        console.log(char);
         let cell = (
             <Button className="cellButton" onClick={() => this.sendTurn(x, y)}>{char}</Button>
         )

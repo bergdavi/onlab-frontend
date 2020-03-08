@@ -48,16 +48,14 @@ class MyApp extends App {
 
         return (
             <UserContext.Provider value={{user: this.state.user, updateUser: this.updateUser, refreshUser: this.refreshUser}}>
-                <Container>
-                    <Head>
-                        <title>Create Next App</title>
-                        <link rel="icon" href="/favicon.ico" />
-                    </Head>
-                    <header>
-                        <NavBar />
-                    </header>
-                    <Component {...pageProps} {...this.state}/>
-                </Container>
+                <Head>
+                    <title>Create Next App</title>
+                    <link rel="icon" href="/favicon.ico" />
+                </Head>
+                <header>
+                    <NavBar />
+                </header>
+                <Component {...pageProps} {...this.state}/>
             </UserContext.Provider>
         )
     }
