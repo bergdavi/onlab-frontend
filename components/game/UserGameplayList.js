@@ -1,17 +1,31 @@
 import React from 'react';
 import UserGameplayItem from './UserGameplayItem'
+import Constants from '../util/constants'
 
 class UserGameplayList extends React.Component {
 
     constructor(props) {
         super(props);
+        this.state = {};
+    }
+
+    async componentDidMount() {
+        // TODO use a gameplay specific endpoint instead
+        const res = await fetch(`${Constants.api.pathPrefix}/users/current`);
+        if(res.status === 200) {
+            const user = await res.json();
+            this.setState({gameplays : user.gameplays});
+        } else {
+            // TODO proper error handling
+            return null;
+        }
     }
 
     render() {
-        if(!this.props.user || !this.props.user.gameplays) {
+        if(!this.state.gameplays) {
             return <h1>Loading...</h1>
         }
-        let gameplays = this.props.user.gameplays.map((gameplay) => {
+        let gameplays = this.state.gameplays.filter(gameplay => gameplay.gameplay.status === "in_progress").map((gameplay) => {
             return (
                 <div>
                     <div className="userGameplayItem">

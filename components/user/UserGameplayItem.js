@@ -19,7 +19,7 @@ class UserGameplayList extends React.Component {
         return (
             <Card key={gameplay.id} onClick={this.onItemClick} style={{backgroundColor: gameplay.status === "finished" ? "gray" : "white"}}>
                 <div className="cardContainer">
-                    <img src="https://via.placeholder.com/300x150"></img>
+                    <img src={`/${game.id}.png`}></img>
                     <div>
                         <h1>{game.name}</h1>
                         <h2>Players: {gameplay.users.map((u) => u.username).sort().join(", ")}</h2>
@@ -29,7 +29,7 @@ class UserGameplayList extends React.Component {
                     img {
                         width: 300px;
                         height: 150px;
-                        object-fit: cover;
+                        object-fit: contain;
                         float: left;
                         margin-right: 10px;
                     }

@@ -40,6 +40,20 @@ class GameWrapper extends React.Component {
         }
     }
 
+    componentDidMount() {
+        this.updateComponent()
+    }
+
+    componentWillUnmount() {
+        this.client.deactivate();
+    }
+
+    async componentDidUpdate(previousProps) {
+        if(!previousProps || (this.props.gameplayId && previousProps.gameplayId !== this.props.gameplayId)) {
+            this.updateComponent();
+        }
+    }
+
     openSocket = (gameplayId) => {
         if(this.client) {
             this.client.deactivate();
@@ -53,16 +67,6 @@ class GameWrapper extends React.Component {
             this.client.subscribe(`/user/topic/gameplay/${gameplayId}`, (message) => {
                 this.receivedState(JSON.parse(message.body));
             });
-        }
-    }
-
-    componentDidMount() {
-        this.updateComponent()
-    }
-
-    async componentDidUpdate(previousProps) {
-        if(!previousProps || (this.props.gameplayId && previousProps.gameplayId !== this.props.gameplayId)) {
-            this.updateComponent();
         }
     }
 

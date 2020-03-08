@@ -46,7 +46,7 @@ class SelectedGame extends React.Component {
             <div style={{width: "100%", height: "250px", backgroundColor: "lightGray", padding: "25px"}}>
                 <Row style={{height: "100%"}}>
                     <Col style={{height: "100%"}}>
-                        <img src="https://via.placeholder.com/400x200" style={{width: "100%", height: "100%", objectFit: "cover"}}></img>
+                        <img src={`/${game.id}.png`} style={{width: "100%", height: "100%", objectFit: "contain"}}></img>
                     </Col>
                     <Col style={{height: "100%"}}>
                         <div style={{width: "100%", height: "80px", overflow: "auto"}}>

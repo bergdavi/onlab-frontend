@@ -9,6 +9,8 @@ import Constants from '../components/util/constants'
 
 
 import 'bootstrap/dist/css/bootstrap.min.css';
+import NotifyToast from '../components/util/NotifyToast';
+import NotificationList from '../components/util/NotificationList';
 
 class MyApp extends App {
 
@@ -54,6 +56,7 @@ class MyApp extends App {
                 </Head>
                 <header>
                     <NavBar />
+                    <NotificationList />
                 </header>
                 <Component {...pageProps} {...this.state}/>
             </UserContext.Provider>
