@@ -59,9 +59,8 @@ class LoginNavItem extends React.Component {
             body: data
         });
         if(res.status === 200) {
-            const user = await res.json();
             this.toggleLoginModal();
-            this.props.updateUser(user);
+            this.props.refreshUser();
         } else {
             this.setState({
                 passwordInput: ""

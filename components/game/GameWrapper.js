@@ -61,7 +61,7 @@ class GameWrapper extends React.Component {
             this.client = new Client();
         }        
         // TODO server prefix?
-        this.client.brokerURL = `ws://${window.location.host}/gameplay`;
+        this.client.brokerURL = `ws://${window.location.host}/ws/gameplay`;
         this.client.activate();
         this.client.onConnect = () => {
             this.client.subscribe(`/user/topic/gameplay/${gameplayId}`, (message) => {

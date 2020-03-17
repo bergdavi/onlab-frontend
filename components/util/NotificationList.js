@@ -30,7 +30,7 @@ class NotificationList extends React.Component {
             this.client = new Client();
         }        
         // TODO server prefix?
-        this.client.brokerURL = `ws://${window.location.host}/notification`;
+        this.client.brokerURL = `ws://${window.location.host}/ws/notification`;
         this.client.activate();
         this.client.onConnect = () => {
             this.client.subscribe(`/user/topic/notification`, (message) => {
