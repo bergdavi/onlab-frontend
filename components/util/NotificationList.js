@@ -29,9 +29,8 @@ class NotificationList extends React.Component {
             this.client.deactivate();
         } else {
             this.client = new Client();
-        }        
-        // TODO server prefix?
-        this.client.brokerURL = `${Constants.api.webSocketProtocol}://${window.location.host}/${Constants.api.webSocketPrefix}/notification`;
+        }
+        this.client.brokerURL = `${Constants.api.webSocketProtocol}://${window.location.host}${Constants.api.webSocketPrefix}/notification`;
         this.client.activate();
         this.client.onConnect = () => {
             this.client.subscribe(`/user/topic/notification`, (message) => {

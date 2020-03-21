@@ -1,10 +1,10 @@
 export default {
     api: {
         // pathPrefix: '/api/game-service/v1',
-        // webSocketPrefix: 'ws',
+        // webSocketPrefix: '/ws',
         // webSocketProtocol: 'ws'
         pathPrefix: '/game-service/v1',
-        webSocketPrefix: '',
+        webSocketPrefix: '/',
         webSocketProtocol: 'wss'
     }
 };
