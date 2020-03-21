@@ -4,7 +4,7 @@ export default {
         // webSocketPrefix: '/ws',
         // webSocketProtocol: 'ws'
         pathPrefix: '/game-service/v1',
-        webSocketPrefix: '/',
+        webSocketPrefix: '',
         webSocketProtocol: 'wss'
     }
 };
