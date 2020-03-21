@@ -6,6 +6,7 @@ import Router from 'next/router';
 import NotifyToast from './NotifyToast';
 import { Client, Message } from '@stomp/stompjs';
 import uuid, { v4 as uuidv4 } from 'uuid';
+import Constants from '../util/constants'
 
 
 class NotificationList extends React.Component {
@@ -30,7 +31,7 @@ class NotificationList extends React.Component {
             this.client = new Client();
         }        
         // TODO server prefix?
-        this.client.brokerURL = `ws://${window.location.host}/ws/notification`;
+        this.client.brokerURL = `${Constants.api.webSocketProtocol}://${window.location.host}/${Constants.api.webSocketPrefix}/notification`;
         this.client.activate();
         this.client.onConnect = () => {
             this.client.subscribe(`/user/topic/notification`, (message) => {
