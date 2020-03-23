@@ -25,7 +25,8 @@ class LoginNavItem extends React.Component {
             registerUsernameInput: '',
             registerEmailInput: '',
             registerPasswordInput: '',
-            registerRepeatPasswordInput: ''
+            registerRepeatPasswordInput: '',
+            loading: false
         }
     }
 
@@ -45,8 +46,19 @@ class LoginNavItem extends React.Component {
         });
     }
 
+    getUser = async () => {
+        const res = await fetch(`${Constants.api.pathPrefix}/users/current`);
+        if(res.status === 200) {
+            const user = await res.json();
+            this.props.updateUser(user);
+        }
+        setTimeout(() => this.setState({loading: false}), 1000);
+        this.toggleLoginModal();
+    }
+
     submitLogin = async (e) => {
         e.preventDefault();
+        this.setState({loading: true});
         const data = JSON.stringify({
             username: this.state.loginUsernameInput,
             password: this.state.loginPasswordInput
@@ -59,8 +71,7 @@ class LoginNavItem extends React.Component {
             body: data
         });
         if(res.status === 200) {
-            this.toggleLoginModal();
-            this.props.refreshUser();
+            this.getUser();
         } else {
             this.setState({
                 passwordInput: ""
@@ -134,9 +145,8 @@ class LoginNavItem extends React.Component {
                                 <Label for="loginPassword">Password</Label>
                                 <Input type="password" onChange={(e) => this.setState({loginPasswordInput: e.target.value})} value={this.state.loginPasswordInput} name="password" id="loginPassword" placeholder="Password" />
                             </FormGroup>
-                            <Button color="primary" type="submit">
-                                Login
-                                {/* <Spinner animation="grow" /> */}
+                            <Button color="primary" type="submit" disabled={this.state.loading} style={{width: "70px", height: "40px"}}>
+                                {this.state.loading?<Spinner type="border" style={{width: "26px", height: "26px"}} />:"Login"}
                             </Button>
                         </Form>
                     </ModalBody>

@@ -42,7 +42,7 @@ class NavBar extends React.Component {
                             <Link href="/games"><NavLink>Games</NavLink></Link>
                         </NavItem>
                         <NavItem>
-                            <Link href="/user"><NavLink>User</NavLink></Link>
+                            <Link href="/user/gameplays"><NavLink>User</NavLink></Link>
                         </NavItem>
                     </Nav>                    
                     <Nav>

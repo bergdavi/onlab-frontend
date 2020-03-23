@@ -1,6 +1,9 @@
 import React from 'react';
 import UserGameplayItem from './UserGameplayItem'
 import Constants from '../util/constants'
+import {
+    Spinner
+} from 'reactstrap';
 
 class UserGameplayList extends React.Component {
 
@@ -23,7 +26,11 @@ class UserGameplayList extends React.Component {
     
     render() {
         if(!this.state.gameplays) {
-            return <h1>Loading...</h1>
+            return (
+                <div align="center" style={{margin: "10px"}}>
+                    <Spinner type="border" style={{width: "26px", height: "26px"}} />
+                </div>
+            )
         }
         let gameplays = this.state.gameplays.map((gameplay) => {
             return (
