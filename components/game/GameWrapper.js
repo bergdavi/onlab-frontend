@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-    Card, Row
+    Card, Row, Alert, Button
 } from 'reactstrap';
 import { Client, Message } from '@stomp/stompjs';
 import Constants from '../util/constants'
@@ -65,7 +65,22 @@ class GameWrapper extends React.Component {
         this.client.activate();
         this.client.onConnect = () => {
             this.client.subscribe(`/user/topic/gameplay/${gameplayId}`, (message) => {
-                this.receivedState(JSON.parse(message.body));
+                console.log(message);
+                console.log(message.body);
+                let messageType = message.body.substring(0, 1);
+                let messageBody = JSON.parse(message.body.substring(2));
+                switch(messageType) {
+                    case 's': // new state
+                        this.receivedState(messageBody);
+                        break;
+                    case 't': // turn related info
+                        alert(messageBody.status);
+                        this.forceUpdate();
+                        break;
+                    case 'e': // end of game
+                        this.setState({gameResult: messageBody});
+                        break;
+                }
             });
         }
     }
@@ -79,6 +94,36 @@ class GameWrapper extends React.Component {
         this.client.publish({destination: `/app/gameplay/${this.props.gameplayId}`, body: gameTurn});
     }
 
+    closeAlert = () => {
+        this.setState({alertClosed: true});
+    }
+
+    renderAlert =  () => {
+        if(!this.state.gameResult || this.state.alertClosed) return "";
+        let alertColor;
+        let alertText;
+        switch(this.state.gameResult.result) {
+            case 'win':
+                alertColor = "success";
+                alertText = "The game ended! You won!";
+                break;
+            case 'lose':
+                alertColor = "danger";
+                alertText = "The game ended! You lost!";
+                break;
+            case 'draw':
+                alertColor = "secondary";
+                alertText = "The game ended in a draw!";
+                break;
+        }
+        return (
+            <Alert color={alertColor} style={{position: "absolute", width: "calc(100% - 2*15px - 20px)", left: "calc(15px + 10px)", top: "10px"}}>
+                {alertText}
+                <Button close onClick={this.closeAlert}></Button>
+            </Alert>
+        )
+    }
+
     render() {        
         if(!this.state.componentClass) {
             return "Loading...";
@@ -88,6 +133,7 @@ class GameWrapper extends React.Component {
 
         return (
             <div>
+                {this.renderAlert()}
                 {/* TODO pass userIdx to the game */}
                 <GameComponent gameState={this.state.gameState} sendTurn={this.sendTurn} style={{width: "100%", height: "100%"}}></GameComponent>
             </div>

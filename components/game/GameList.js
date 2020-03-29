@@ -44,7 +44,7 @@ class GameList extends React.Component {
         return(
             <div style={{display: "flex", flexWrap: "wrap", justifyContent: "center"}}>
                 {this.state.games.map(g => <GameItem game={g} />)}
-                <SelectedGame game={this.state.games[0]} />
+                <SelectedGame game={this.state.games[1]} />
             </div>
         );
     }
