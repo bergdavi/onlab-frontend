@@ -1,9 +1,12 @@
 import React from 'react';
 import {
-    Card, Row, Alert, Button
+    Card, Row, Alert, Button, Col
 } from 'reactstrap';
 import { Client, Message } from '@stomp/stompjs';
-import Constants from '../util/constants'
+import Constants from '../util/constants';
+import GameplaySidebar from './GameplaySidebar';
+import UserContextWrapper from '../util/UserContextWrapper';
+import UserGameplayList from './UserGameplayList'
 
 class GameWrapper extends React.Component {
 
@@ -13,10 +16,10 @@ class GameWrapper extends React.Component {
     }
 
     getGameplay = async (gameplayId) => {
-        const res = await fetch(`${Constants.api.pathPrefix}/gameplays/${gameplayId}`);
+        const res = await fetch(`${Constants.api.pathPrefix}/gameplays/${gameplayId}/user`);
         if(res.status === 200) {
-            const gameplay = await res.json();
-            return gameplay;
+            const userGameplay = await res.json();
+            return userGameplay;
         } else {
             return null;
         }
@@ -27,17 +30,23 @@ class GameWrapper extends React.Component {
             return;
         }
         this.openSocket(this.props.gameplayId);
-        let gameplay = await this.getGameplay(this.props.gameplayId);
-        if(gameplay) {
-            let gameId = gameplay.game.id;
-            let gameState = JSON.parse(gameplay.gameState);
-            import(`./games/${gameId}`).then(({default: componentClass}) => {
-                this.setState({
-                    componentClass: componentClass,
-                    gameState: gameState
+        let userGameplay = await this.getGameplay(this.props.gameplayId);
+        if(userGameplay) {
+            let gameplay = userGameplay.gameplay;
+            let userIdx = userGameplay.userIdx;
+            if(gameplay) {
+                let gameId = gameplay.game.id;
+                let gameState = JSON.parse(gameplay.gameState);
+                import(`./games/${gameId}`).then(({default: componentClass}) => {
+                    this.setState({
+                        componentClass,
+                        gameState,
+                        gameplay,
+                        userIdx
+                    });
                 });
-            });
-        }
+            }
+        }        
     }
 
     componentDidMount() {
@@ -65,8 +74,6 @@ class GameWrapper extends React.Component {
         this.client.activate();
         this.client.onConnect = () => {
             this.client.subscribe(`/user/topic/gameplay/${gameplayId}`, (message) => {
-                console.log(message);
-                console.log(message.body);
                 let messageType = message.body.substring(0, 1);
                 let messageBody = JSON.parse(message.body.substring(2));
                 switch(messageType) {
@@ -74,19 +81,48 @@ class GameWrapper extends React.Component {
                         this.receivedState(messageBody);
                         break;
                     case 't': // turn related info
-                        alert(messageBody.status);
+                        switch(messageBody.status) {
+                            case 'invalid_step':
+                                this.showAlert('warning', 'Invalid step, please try again!', 3);
+                                break;
+                            case 'invalid_user':
+                                this.showAlert('warning', 'It is not your turn, please wait!', 3);
+                                break;
+                            // TODO this should be game over
+                            case 'finished':
+                                this.showAlert('warning', 'The game is over', 3);
+                                break;
+                            case 'unexpected_error':
+                                this.showAlert('warning', 'Unexpected error', 3);
+                                break;
+                        }
                         this.forceUpdate();
                         break;
                     case 'e': // end of game
-                        this.setState({gameResult: messageBody});
+                        let gameResult = messageBody;
+                        this.setState({gameResult});
+                        switch(gameResult.result) {
+                            case 'win':
+                                this.showAlert('success', 'The game ended! You won!');
+                                break;
+                            case 'lose':
+                                this.showAlert('danger', 'The game ended! You lost!');
+                                break;
+                            case 'draw':
+                                this.showAlert('secondary', 'The game ended in a draw!');
+                                break;
+                        }
                         break;
                 }
             });
         }
     }
 
-    receivedState = (gameState) => {
-        this.setState({gameState: gameState});
+    receivedState = async (gameState) => {
+        let userGameplay = await this.getGameplay(this.props.gameplayId);
+        let gameplay = userGameplay.gameplay;
+        let userIdx = userGameplay.userIdx;
+        this.setState({gameState, gameplay, userIdx});        
     }
 
     sendTurn = async (gameTurn) => {
@@ -94,31 +130,27 @@ class GameWrapper extends React.Component {
         this.client.publish({destination: `/app/gameplay/${this.props.gameplayId}`, body: gameTurn});
     }
 
-    closeAlert = () => {
-        this.setState({alertClosed: true});
+    showAlert = (color, text, timeout) => {
+        this.setState({
+            alert: {
+                color,
+                text
+            }
+        });
+        if(timeout) {
+            setTimeout(this.closeAlert, timeout * 1000);
+        }
     }
 
-    renderAlert =  () => {
-        if(!this.state.gameResult || this.state.alertClosed) return "";
-        let alertColor;
-        let alertText;
-        switch(this.state.gameResult.result) {
-            case 'win':
-                alertColor = "success";
-                alertText = "The game ended! You won!";
-                break;
-            case 'lose':
-                alertColor = "danger";
-                alertText = "The game ended! You lost!";
-                break;
-            case 'draw':
-                alertColor = "secondary";
-                alertText = "The game ended in a draw!";
-                break;
-        }
+    closeAlert = () => {
+        this.setState({alert: undefined});
+    }
+
+    renderAlert = () => {
+        if(!this.state.alert) return "";
         return (
-            <Alert color={alertColor} style={{position: "absolute", width: "calc(100% - 2*15px - 20px)", left: "calc(15px + 10px)", top: "10px"}}>
-                {alertText}
+            <Alert color={this.state.alert.color} style={{position: "absolute", width: "calc(100% - 2*15px - 20px)", left: "calc(15px + 10px)", top: "10px"}}>
+                {this.state.alert.text}
                 <Button close onClick={this.closeAlert}></Button>
             </Alert>
         )
@@ -132,11 +164,18 @@ class GameWrapper extends React.Component {
         let GameComponent = this.state.componentClass;
 
         return (
-            <div>
-                {this.renderAlert()}
-                {/* TODO pass userIdx to the game */}
-                <GameComponent gameState={this.state.gameState} sendTurn={this.sendTurn} style={{width: "100%", height: "100%"}}></GameComponent>
-            </div>
+            <Row>
+                <Col xs="3">
+                    <UserContextWrapper><UserGameplayList selectedGameplayId={this.props.gameplayId}/></UserContextWrapper>
+                </Col>
+                <Col>
+                    {this.renderAlert()}
+                    <GameComponent gameState={this.state.gameState} userIdx={this.state.userIdx} sendTurn={this.sendTurn} style={{width: "100%", height: "100%"}}></GameComponent>
+                </Col>
+                <Col xs="3">
+                    <GameplaySidebar gameplay={this.state.gameplay} />
+                </Col>
+            </Row>
         );        
     }
 }

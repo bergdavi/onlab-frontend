@@ -49,6 +49,10 @@ export default class Chess extends React.Component {
         }
     }
 
+    isInverted = () => {
+        return this.props.userIdx == 1;
+    }
+
     drawBackground = () => {
         if(!this.canvas) {
             return;
@@ -95,17 +99,6 @@ export default class Chess extends React.Component {
         ctx.drawImage(this.images[img].image, x - size/2, y - size/2, size, size);
     }
 
-    getPosFromClickEvent = (e) => {
-        const canvas = e.target;
-        const rect = canvas.getBoundingClientRect()
-        let x = (e.clientX  - rect.left)/rect.width*canvas.width;
-        let y = (e.clientY  - rect.top)/rect.height*canvas.height;
-        return {
-            cellIdx: this.getCellIdxFromPixels(x, y),
-            pos: {x, y}
-        };
-    }
-
     canvasMouseDown = (e) => {
         let pos = this.getPosFromClickEvent(e);
         let figure = this.props.gameState.board[pos.cellIdx.cellIdx][pos.cellIdx.lineIdx]
@@ -137,9 +130,26 @@ export default class Chess extends React.Component {
         this.drawFigure(this.selected.figure, pos.pos.x, pos.pos.y, 80);
     }
 
+    getPosFromClickEvent = (e) => {
+        const canvas = e.target;
+        const rect = canvas.getBoundingClientRect()
+        let x = (e.clientX  - rect.left)/rect.width*canvas.width;
+        let y = (e.clientY  - rect.top)/rect.height*canvas.height;
+        return {
+            cellIdx: this.getCellIdxFromPixels(x, y),
+            pos: {x, y}
+        };
+    }
+
     getCellIdxFromPixels = (x, y) => {
         let cellIdx = Math.floor(x / 50);
         let lineIdx = Math.floor(8 - y / 50);
+        if(this.isInverted()) {
+            return {
+                cellIdx: 7 - cellIdx,
+                lineIdx: 7 - lineIdx
+            }
+        }
         return {
             cellIdx: cellIdx,
             lineIdx: lineIdx
@@ -147,6 +157,10 @@ export default class Chess extends React.Component {
     }
 
     getPixelsFromCellIdx = (x, y) => {
+        if(this.isInverted()) {
+            x = 7 - x;
+            y = 7 - y;
+        }
         return {
             x: x*50,
             y: (8-1-y)*50

@@ -12,29 +12,11 @@ class GameplaySidebar extends React.Component {
         this.state = {};
     }
 
-    updateComponent = async (gameplayId) => {
-        if(!gameplayId) {
-            return;
-        }
-        const res = await fetch(`${Constants.api.pathPrefix}/gameplays/${this.props.gameplayId}`);
-        if(res.status === 200) {
-            const gameplay = await res.json();
-            this.setState({gameplay: gameplay});
-        }
-    }
-
     componentDidMount() {
-        this.updateComponent(this.props.gameplayId);
-    }
-
-    componentDidUpdate(previousProps) {
-        if(!previousProps || (this.props.gameplayId && previousProps.gameplayId !== this.props.gameplayId)) {
-            this.updateComponent(this.props.gameplayId);
-        }
     }
 
     render() {
-        let gameplay = this.state.gameplay;
+        let gameplay = this.props.gameplay;
         if(!gameplay) {
             return "Loading...";
         }

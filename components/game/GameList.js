@@ -33,6 +33,10 @@ class GameList extends React.Component {
         this.getGames();
     }
 
+    selectGame = (idx) => {
+        this.setState({selectGame: idx});
+    }
+
     render() {
         if(this.state.loading) {
             return (
@@ -43,8 +47,8 @@ class GameList extends React.Component {
         }
         return(
             <div style={{display: "flex", flexWrap: "wrap", justifyContent: "center"}}>
-                {this.state.games.map(g => <GameItem game={g} />)}
-                <SelectedGame game={this.state.games[1]} />
+                {this.state.games.map((g, idx) => <div onClick={() => this.selectGame(idx)}><GameItem game={g} /></div>)}
+                {this.state.selectGame !== undefined ? <SelectedGame game={this.state.games[this.state.selectGame]} /> : ""}                
             </div>
         );
     }

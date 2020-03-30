@@ -15,19 +15,8 @@ const Game = () => {
     return (
         <main>
             <div>
-                <SecurePage>
-                    <Row>
-                        <Col xs="3">
-                            <UserContextWrapper><UserGameplayList selectedGameplayId={gameplayId}/></UserContextWrapper>
-                        </Col>
-                        <Col>
-                            <GameWrapper gameplayId={gameplayId} />
-                        </Col>
-                        <Col xs="3">
-                            {/* <UserContextWrapper><UserGameplayList /></UserContextWrapper> */}
-                            <GameplaySidebar gameplayId={gameplayId}/>
-                        </Col>
-                    </Row>
+                <SecurePage>                        
+                    <GameWrapper gameplayId={gameplayId} />
                 </SecurePage>
             </div>
             <style jsx>{`
