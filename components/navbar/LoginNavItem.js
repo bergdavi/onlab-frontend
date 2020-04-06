@@ -59,14 +59,14 @@ class LoginNavItem extends React.Component {
     submitLogin = async (e) => {
         e.preventDefault();
         this.setState({loading: true});
-        const data = JSON.stringify({
-            username: this.state.loginUsernameInput,
-            password: this.state.loginPasswordInput
-        });
+        let data = [];
+        data.push('username=' + this.state.loginUsernameInput);
+        data.push('password=' + this.state.loginPasswordInput);
+        data = data.join('&');
         const res = await fetch(`${Constants.api.pathPrefix}/users/login`, {
             method: "POST",
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/x-www-form-urlencoded'
             },
             body: data
         });
@@ -74,7 +74,8 @@ class LoginNavItem extends React.Component {
             this.getUser();
         } else {
             this.setState({
-                passwordInput: ""
+                loginPasswordInput: "",
+                loading: false
             });
         }
     }
