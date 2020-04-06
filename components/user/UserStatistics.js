@@ -1,5 +1,6 @@
 import React from 'react';
 import { Doughnut } from 'react-chartjs-2';
+import { Spinner } from 'reactstrap';
 import Constants from '../util/constants';
 
 class UserStatistics extends React.Component {
@@ -23,7 +24,11 @@ class UserStatistics extends React.Component {
     
     render() {
         if(!this.state.gameplays) {
-            return <h1>Loading...</h1>
+            return (
+                <div align="center" style={{margin: "10px"}}>
+                    <Spinner type="border" style={{width: "26px", height: "26px"}} />
+                </div>
+            )
         }
         
         let results = {

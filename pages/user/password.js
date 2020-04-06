@@ -1,5 +1,5 @@
 import { Col, Row } from 'reactstrap';
-import UserStatistics from '../../components/user/UserStatistics';
+import UserPassword from '../../components/user/UserPassword';
 import SecurePage from '../../components/util/SecurePage';
 import UserSideBar from '../../components/user/UserSideBar';
 
@@ -8,10 +8,10 @@ const Statistics = () => (
         <SecurePage>
             <Row>
                 <Col xs="2">
-                    <UserSideBar selected='statistics'></UserSideBar>
+                    <UserSideBar selected='password'></UserSideBar>
                 </Col>
                 <Col>
-                    <UserStatistics/>  
+                    <UserPassword/>  
                 </Col>
             </Row>
         </SecurePage>
