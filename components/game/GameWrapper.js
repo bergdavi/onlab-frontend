@@ -165,7 +165,7 @@ class GameWrapper extends React.Component {
 
         return (
             <Row>
-                <Col xs="3">
+                <Col xs="2">
                     <UserContextWrapper><UserGameplayList selectedGameplayId={this.props.gameplayId}/></UserContextWrapper>
                 </Col>
                 <Col>

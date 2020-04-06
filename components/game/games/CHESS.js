@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-    Card, Row, Button
+    Card, Row, Button, Modal, ModalBody, ModalHeader
 } from 'reactstrap';
 
 export default class Chess extends React.Component {
@@ -115,11 +115,21 @@ export default class Chess extends React.Component {
         let pos = this.getPosFromClickEvent(e);
         let cellIdx = this.getCellIdxFromPixels(pos.pos.x, pos.pos.y);
         let alignedPos = this.getPixelsFromCellIdx(cellIdx.cellIdx, cellIdx.lineIdx);
+        let selected = this.selected;
         this.drawBackground();
         this.drawFigures();
-        this.drawFigure(this.selected.figure, alignedPos.x + 25, alignedPos.y + 25);
-        this.sendTurn(this.selected.cellIdx.cellIdx, this.selected.cellIdx.lineIdx, cellIdx.cellIdx, cellIdx.lineIdx);
-        this.selected = undefined;
+        this.drawFigure(selected.figure, alignedPos.x + 25, alignedPos.y + 25);
+        if(this.selected.figure.type == 'PAWN' && ((this.props.userIdx === 0 && cellIdx.lineIdx === 7) || (this.props.userIdx === 1 && cellIdx.lineIdx === 0))) {
+            this.setState({promoteOpen: true});
+            this.sendPromoteTurn = (type) => {
+                this.sendTurn(selected.cellIdx.cellIdx, selected.cellIdx.lineIdx, cellIdx.cellIdx, cellIdx.lineIdx, type.toUpperCase());
+                this.setState({promoteOpen: false});
+            };
+            this.selected = undefined;
+        } else {
+            this.sendTurn(selected.cellIdx.cellIdx, selected.cellIdx.lineIdx, cellIdx.cellIdx, cellIdx.lineIdx);
+            this.selected = undefined;
+        }
     }
 
     canvasMouseMove = (e) => {
@@ -181,8 +191,8 @@ export default class Chess extends React.Component {
         }
     }
 
-    sendTurn = (fromCellIdx, fromLineIdx, toCellIdx, toLineIdx) => {
-        this.props.sendTurn({fromX: fromCellIdx, fromY: fromLineIdx, toX: toCellIdx, toY: toLineIdx});
+    sendTurn = (fromCellIdx, fromLineIdx, toCellIdx, toLineIdx, promote) => {
+        this.props.sendTurn({fromX: fromCellIdx, fromY: fromLineIdx, toX: toCellIdx, toY: toLineIdx, promote});
     }
 
     sendForfeit = () => {
@@ -194,8 +204,22 @@ export default class Chess extends React.Component {
     }
 
     render() {
+        let color = this.props.userIdx === 0 ? 'white' : 'black';
         return (
             <div>
+                <Modal isOpen={this.state.promoteOpen}>
+                    <ModalHeader>
+                        Choose a figure to promote to!
+                    </ModalHeader>
+                    <ModalBody>
+                        <div style={{display: 'flex', justifyContent: 'space-around'}}>
+                            <img height='100px' width='100px' src={`chess/${color}_queen.png`} onClick={() => this.sendPromoteTurn('queen')}></img>
+                            <img height='100px' width='100px' src={`chess/${color}_rook.png`} onClick={() => this.sendPromoteTurn('rook')}></img>
+                            <img height='100px' width='100px' src={`chess/${color}_bishop.png`} onClick={() => this.sendPromoteTurn('bishop')}></img>
+                            <img height='100px' width='100px' src={`chess/${color}_knight.png`} onClick={() => this.sendPromoteTurn('knight')}></img>
+                        </div>
+                    </ModalBody>
+                </Modal>
                 <canvas ref="canvas" width={400} height={400} style={{height: "100%", width: "100%", objectFit: "contain"}}></canvas>
                 <Button color="danger" onClick={this.sendForfeit}>Forfeit</Button>
                 <Button color="secondary" onClick={this.sendOfferDraw}>Offer draw</Button>
