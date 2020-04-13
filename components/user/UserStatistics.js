@@ -1,5 +1,5 @@
 import React from 'react';
-import { Doughnut } from 'react-chartjs-2';
+import { Doughnut, Radar } from 'react-chartjs-2';
 import { Spinner } from 'reactstrap';
 import Constants from '../util/constants';
 
@@ -37,14 +37,24 @@ class UserStatistics extends React.Component {
             draw: 0
         };
 
+        let games = {};
+
         this.state.gameplays.forEach(gameplay => {
             if(gameplay.result) {
                 let result = gameplay.result.toLowerCase();
                 results[result]++;
             }
+            let gameName = gameplay.gameplay.game.name;
+            if(games[gameName]) {
+                games[gameName]++;
+            } else {
+                games[gameName] = 1;
+            }
         });
 
-        const data = {
+        console.log(JSON.stringify(Object.keys(games)));
+
+        const doughnutData = {
             labels: ['Win', 'Lose', 'Draw'],
             datasets: [
               {
@@ -57,10 +67,32 @@ class UserStatistics extends React.Component {
                 data: [results.win, results.lose, results.draw]
               }
             ]
-          };
+        };
+
+        const radarData = {
+            labels: Object.keys(games),
+            datasets: [
+                {
+                    label: 'Game variety',
+                    backgroundColor: 'rgba(0,150,255,0.2)',
+                    borderColor: 'rgba(0,150,255,1)',
+                    pointBackgroundColor: 'rgba(0,150,255,1)',
+                    pointBorderColor: 'rgba(0,150,255,1)',
+                    pointHoverBackgroundColor: 'rgba(100,255,255,1)',
+                    data: Object.keys(games).map((k) => games[k])
+                },
+                {
+                    label: '',
+                    data: [0]
+                },
+            ]
+        }
 
         return (
-            <Doughnut data={data}/>
+            <div>
+                <Doughnut data={doughnutData}/>
+                <Radar data={radarData}/>
+            </div>
         )
     }
 }

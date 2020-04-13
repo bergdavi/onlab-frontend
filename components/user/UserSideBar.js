@@ -11,6 +11,7 @@ class UserSideBar extends React.Component {
         super(props);
         this.menuItems = [
             {id: 'games', title: 'Games', link: '/user/gameplays'},
+            {id: 'invites', title: 'Invites', link: '/user/invites'},
             {id: 'statistics', title: 'Statistics', link: '/user/statistics'},
             {id: 'password', title: 'Change password', link: '/user/password'}
         ];
