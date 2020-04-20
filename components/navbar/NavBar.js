@@ -38,12 +38,16 @@ class NavBar extends React.Component {
                         <NavItem>
                             <Link href="/"><NavLink>Home</NavLink></Link>
                         </NavItem>
+                        {this.props.user ? 
                         <NavItem>
                             <Link href="/games"><NavLink>Games</NavLink></Link>
                         </NavItem>
+                        : ""}
+                        {this.props.user ? 
                         <NavItem>
                             <Link href="/user/gameplays"><NavLink>User</NavLink></Link>
                         </NavItem>
+                        : ""}
                     </Nav>                    
                     <Nav>
                         <UserContextWrapper>

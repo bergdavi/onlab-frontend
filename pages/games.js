@@ -9,7 +9,9 @@ const Game = () => {
     
     return (
         <main>
-            <GameList selected={router.query.selected} />
+            <SecurePage>
+                <GameList selected={router.query.selected} />
+            </SecurePage>
         </main>
     );
 }

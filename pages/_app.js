@@ -11,6 +11,7 @@ import Constants from '../components/util/constants'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import NotifyToast from '../components/util/NotifyToast';
 import NotificationList from '../components/util/NotificationList';
+import UserContextWrapper from '../components/util/UserContextWrapper';
 
 class MyApp extends App {
 
@@ -55,7 +56,9 @@ class MyApp extends App {
                     <link rel="icon" href="/favicon.ico" />
                 </Head>
                 <header>
-                    <NavBar />
+                    <UserContextWrapper>
+                        <NavBar />
+                    </UserContextWrapper>
                     <NotificationList />
                 </header>
                 <Component {...pageProps} {...this.state}/>
