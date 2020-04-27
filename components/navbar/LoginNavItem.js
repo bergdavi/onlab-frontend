@@ -11,7 +11,10 @@ import {
     NavbarText,
     Spinner
 } from 'reactstrap';
-import Constants from '../util/constants'
+import LoginModal from './LoginModal';
+import RegisterModal from './RegisterModal';
+import Constants from '../util/constants';
+import UserContextWrapper from '../util/UserContextWrapper';
 
 class LoginNavItem extends React.Component {
 
@@ -20,12 +23,6 @@ class LoginNavItem extends React.Component {
         this.state = {
             isLoginModalOpen: false,
             isRegisterModalOpen: false,
-            loginUsernameInput: '',
-            loginPasswordInput: '',
-            registerUsernameInput: '',
-            registerEmailInput: '',
-            registerPasswordInput: '',
-            registerRepeatPasswordInput: '',
             loading: false
         }
     }
@@ -33,70 +30,13 @@ class LoginNavItem extends React.Component {
     toggleLoginModal = () => {
         this.setState({ 
             isLoginModalOpen: !this.state.isLoginModalOpen,
-            loginUsernameInput: '',
-            loginPasswordInput: ''
         });
     }
 
     toggleRegisterModal = () => {
         this.setState({
             isRegisterModalOpen: !this.state.isRegisterModalOpen,
-            registerUsernameInput: '',
-            registerPasswordInput: ''
         });
-    }
-
-    getUser = async () => {
-        const res = await fetch(`${Constants.api.pathPrefix}/users/current`);
-        if(res.status === 200) {
-            const user = await res.json();
-            this.props.updateUser(user);
-        }
-        setTimeout(() => this.setState({loading: false}), 1000);
-        this.toggleLoginModal();
-    }
-
-    submitLogin = async (e) => {
-        e.preventDefault();
-        this.setState({loading: true});
-        let data = [];
-        data.push('username=' + this.state.loginUsernameInput);
-        data.push('password=' + this.state.loginPasswordInput);
-        data = data.join('&');
-        const res = await fetch(`${Constants.api.pathPrefix}/users/login`, {
-            method: "POST",
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded'
-            },
-            body: data
-        });
-        if(res.status === 200) {
-            this.getUser();
-        } else {
-            this.setState({
-                loginPasswordInput: "",
-                loading: false
-            });
-        }
-    }
-
-    submitRegister = async (e) => {
-        e.preventDefault();
-        const data = JSON.stringify({
-            username: this.state.registerUsernameInput,
-            email: this.state.registerEmailInput,
-            password: this.state.registerPasswordInput
-        });
-        const res = await fetch(`${Constants.api.pathPrefix}/users/register`, {
-            method: "POST",
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: data
-        });
-        if(res.status === 200) {
-            this.toggleRegisterModal();
-        }
     }
 
     submitLogout = async () => {
@@ -134,48 +74,10 @@ class LoginNavItem extends React.Component {
                 <NavbarText style={{marginRight: "15px"}}>{loginText}</NavbarText>
                 {loginButton}
                 {registerButton}
-                <Modal isOpen={this.state.isLoginModalOpen} toggle={this.toggleLoginModal}>
-                    <ModalHeader toggle={this.toggleLoginModal}>Login</ModalHeader>
-                    <ModalBody>
-                        <Form id="loginForm" onSubmit={this.submitLogin}>
-                            <FormGroup>
-                                <Label for="loginUsername">Username</Label>
-                                <Input type="text" onChange={(e) => this.setState({loginUsernameInput: e.target.value})} value={this.state.loginUsernameInput} name="username" id="loginUsername" placeholder="Username" />
-                            </FormGroup>
-                            <FormGroup>
-                                <Label for="loginPassword">Password</Label>
-                                <Input type="password" onChange={(e) => this.setState({loginPasswordInput: e.target.value})} value={this.state.loginPasswordInput} name="password" id="loginPassword" placeholder="Password" />
-                            </FormGroup>
-                            <Button color="primary" type="submit" disabled={this.state.loading} style={{width: "70px", height: "40px"}}>
-                                {this.state.loading?<Spinner type="border" style={{width: "26px", height: "26px"}} />:"Login"}
-                            </Button>
-                        </Form>
-                    </ModalBody>
-                </Modal>
-                <Modal isOpen={this.state.isRegisterModalOpen} toggle={this.toggleRegisterModal}>
-                    <ModalHeader toggle={this.toggleRegisterModal}>Register</ModalHeader>
-                    <ModalBody>
-                        <Form id="registerForm" onSubmit={this.submitRegister}>
-                            <FormGroup>
-                                <Label for="registerUsername">Username</Label>
-                                <Input type="text" onChange={(e) => this.setState({registerUsernameInput: e.target.value})} value={this.state.registerUsernameInput} name="username" id="registerUsername" placeholder="Username" />
-                            </FormGroup>
-                            <FormGroup>
-                                <Label for="registerEmail">Email address</Label>
-                                <Input type="text" onChange={(e) => this.setState({registerEmailInput: e.target.value})} value={this.state.registerEmailInput} name="email" id="registerEmail" placeholder="Email address" />
-                            </FormGroup>
-                            <FormGroup>
-                                <Label for="registerPassword">Password</Label>
-                                <Input type="password" onChange={(e) => this.setState({registerPasswordInput: e.target.value})} value={this.state.registerPasswordInput} name="password" id="registerPassword" placeholder="Password" />
-                            </FormGroup>
-                            <FormGroup>
-                                <Label for="registerRepeatPassword">Repeat Password</Label>
-                                <Input type="password" onChange={(e) => this.setState({registerRepeatPasswordInput: e.target.value})} value={this.state.registerRepeatPasswordInput} name="password" id="registerRepeatPassword" placeholder="Repeat password" />
-                            </FormGroup>
-                            <Button color="primary" type="submit">Register</Button>
-                        </Form>
-                    </ModalBody>
-                </Modal>
+                <UserContextWrapper>
+                    <LoginModal isOpen={this.state.isLoginModalOpen} toggle={this.toggleLoginModal}/>
+                </UserContextWrapper>
+                <RegisterModal isOpen={this.state.isRegisterModalOpen} toggle={this.toggleRegisterModal}/>
             </div>
         );
     }

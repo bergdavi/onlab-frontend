@@ -16,9 +16,6 @@ class UserGameplayItem extends React.Component {
         let nextTurnUser = this.props.userGameplay.gameplay.nextTurn;
         // TODO find a better way to seperate usernames
         let displayUsername = user.username + " "; // Added space to seperate usernames
-        if(user.id === nextTurnUser.id) {
-            return <b>{displayUsername}</b>
-        }
         return displayUsername;
     }
 

@@ -1,8 +1,12 @@
+import HomeJumbotron from '../components/home/HomeJumbotron';
+import HomeMostPlayedGame from '../components/home/HomeMostPlayedGame';
+import UserContextWrapper from '../components/util/UserContextWrapper';
 const Home = () => (
     <main>
-        <h1 className="title">
-            Welcome toooo <a href="https://nextjs.org">Next.js!</a>
-        </h1>
+        <UserContextWrapper>
+            <HomeJumbotron />
+        </UserContextWrapper>
+        <HomeMostPlayedGame />
     </main>
 )
 

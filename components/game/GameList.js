@@ -2,7 +2,7 @@ import React from 'react';
 import UserGameplayItem from './UserGameplayItem'
 import GameItem from './GameItem';
 import SelectedGame from './SelectedGame';
-import Constants from '../util/constants'
+import Constants from '../util/constants';
 import {
     Spinner
 } from 'reactstrap';
