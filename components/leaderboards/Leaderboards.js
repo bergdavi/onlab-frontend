@@ -8,6 +8,7 @@ import {
 } from 'reactstrap';
 import Constants from '../util/constants';
 import LeaderboardsTable from './LeaderboardsTable';
+import ErrorHandler from '../util/errorHandler';
 
 class Leaderboards extends React.Component {
 
@@ -31,8 +32,7 @@ class Leaderboards extends React.Component {
             const games = await res.json();
             this.setState({ games: games });
         } else {
-            // TODO proper error handling
-            return null;
+            ErrorHandler.sendError({message: "Failed to get games"});
         }
         this.setState({ loading: false });
     }
@@ -48,8 +48,7 @@ class Leaderboards extends React.Component {
             const leaderboards = await res.json();
             this.setState({ leaderboards, loadingLeaderboards: false });
         } else {
-            // TODO proper error handling
-            return null;
+            ErrorHandler.sendError({message: "Failed to get leaderboards"});
         }
         this.setState({ loading: false });
     }

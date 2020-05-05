@@ -2,6 +2,7 @@ import React from 'react';
 import { Doughnut, Radar } from 'react-chartjs-2';
 import { Spinner } from 'reactstrap';
 import Constants from '../util/constants';
+import ErrorHandler from '../util/errorHandler';
 
 class UserStatistics extends React.Component {
 
@@ -17,7 +18,7 @@ class UserStatistics extends React.Component {
             const user = await res.json();
             this.setState({gameplays : user.gameplays});
         } else {
-            // TODO proper error handling
+            ErrorHandler.sendError({message: "Failed to get user data"});
             return null;
         }
     }

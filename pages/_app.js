@@ -12,6 +12,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import NotifyToast from '../components/util/NotifyToast';
 import NotificationList from '../components/util/NotificationList';
 import UserContextWrapper from '../components/util/UserContextWrapper';
+import ErrorList from '../components/util/ErrorList';
 
 class MyApp extends App {
 
@@ -59,6 +60,7 @@ class MyApp extends App {
                     <UserContextWrapper>
                         <NavBar />
                     </UserContextWrapper>
+                    <ErrorList></ErrorList>
                     <NotificationList />
                 </header>
                 <Component {...pageProps} {...this.state}/>

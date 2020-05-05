@@ -3,7 +3,7 @@ import Router from 'next/router';
 
 class SecurePageLoginChecker extends React.Component {
     checkUserLogin = () => {
-        if(this.props.user === null) {
+        if(!this.props.user || this.props.user.user.banned || (this.props.type && this.props.user.user.userType !== this.props.type)) {
             Router.push('/');
         }
     }

@@ -4,6 +4,7 @@ import Constants from '../util/constants'
 import {
     Spinner
 } from 'reactstrap';
+import ErrorHandler from '../util/errorHandler';
 
 class UserInviteList extends React.Component {
 
@@ -19,7 +20,7 @@ class UserInviteList extends React.Component {
             const user = await res.json();
             this.setState({invites : user.invites});
         } else {
-            // TODO proper error handling
+            ErrorHandler.sendError({message: "Failed to get user data"});
             return null;
         }
     }

@@ -1,11 +1,11 @@
 import React from 'react';
-import UserGameplayItem from './UserGameplayItem'
 import GameItem from './GameItem';
 import SelectedGame from './SelectedGame';
 import Constants from '../util/constants';
 import {
     Spinner
 } from 'reactstrap';
+import ErrorHandler from '../util/errorHandler';
 
 class GameList extends React.Component {
 
@@ -23,8 +23,7 @@ class GameList extends React.Component {
             const games = await res.json();
             this.setState({games : games});
         } else {
-            // TODO proper error handling
-            return null;
+            ErrorHandler.sendError({message: "Failed to get games"});
         }
         this.setState({loading: false});
     }

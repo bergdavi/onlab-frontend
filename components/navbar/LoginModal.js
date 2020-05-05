@@ -40,6 +40,7 @@ class LoginModal extends React.Component {
         if(res.status === 200) {
             this.getUser();
         } else {
+            // TODO better error handling
             this.setState({
                 loginPasswordInput: "",
                 loading: false

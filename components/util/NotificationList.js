@@ -7,6 +7,7 @@ import NotifyToast from './NotifyToast';
 import { Client, Message } from '@stomp/stompjs';
 import uuid, { v4 as uuidv4 } from 'uuid';
 import Constants from '../util/constants'
+import ErrorHandler from './errorHandler';
 
 
 class NotificationList extends React.Component {

@@ -7,7 +7,7 @@ class SecurePage extends React.Component {
     render() {
         return (
             <UserContextWrapper>
-                <SecurePageLoginChecker>
+                <SecurePageLoginChecker type={this.props.type}>
                     {this.props.children}
                 </SecurePageLoginChecker>
             </UserContextWrapper>

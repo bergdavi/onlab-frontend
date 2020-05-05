@@ -5,6 +5,7 @@ import {
 import Router from 'next/router';
 import Constants from '../util/constants'
 import GameUserInvite from './GameUserInvite';
+import ErrorHandler from '../util/errorHandler';
 
 class SelectedGame extends React.Component {
 
@@ -30,8 +31,7 @@ class SelectedGame extends React.Component {
             const queuePlace = await res.text();
             this.setState({queuePlace: queuePlace});
         } else {
-            console.log("Failed to join");
-            // TODO proper error handling
+            ErrorHandler.sendError({message: "Failed to join game queue"});
         }
     }
 

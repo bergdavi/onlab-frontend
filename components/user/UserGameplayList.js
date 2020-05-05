@@ -4,6 +4,7 @@ import Constants from '../util/constants'
 import {
     Spinner
 } from 'reactstrap';
+import ErrorHandler from '../util/errorHandler';
 
 class UserGameplayList extends React.Component {
 
@@ -19,8 +20,7 @@ class UserGameplayList extends React.Component {
             const user = await res.json();
             this.setState({gameplays : user.gameplays});
         } else {
-            // TODO proper error handling
-            return null;
+            ErrorHandler.sendError({message: "Failed to get user data"});
         }
     }
     

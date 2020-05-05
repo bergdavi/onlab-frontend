@@ -7,6 +7,7 @@ import {
 import Constants from '../util/constants';
 import GameItem from '../game/GameItem';
 import LeaderboardsTable from '../leaderboards/LeaderboardsTable';
+import ErrorHandler from '../util/errorHandler';
 
 class HomeMostPlayedGame extends React.Component {
 
@@ -26,11 +27,12 @@ class HomeMostPlayedGame extends React.Component {
         const res = await fetch(`${Constants.api.pathPrefix}/games`);
         if(res.status === 200) {
             const games = await res.json();
-            this.setState({game : games[0]});
-            this.getLeaderboards(games[0].id);
+            if(games.length > 0) {
+                this.setState({game : games[0]});
+                this.getLeaderboards(games[0].id);
+            }            
         } else {
-            // TODO proper error handling
-            return null;
+            ErrorHandler.sendError({message: "Failed to get games"});
         }
         this.setState({loading: false});
     }
@@ -46,8 +48,7 @@ class HomeMostPlayedGame extends React.Component {
             const leaderboards = await res.json();
             this.setState({ leaderboards, loadingLeaderboards: false });
         } else {
-            // TODO proper error handling
-            return null;
+            ErrorHandler.sendError({message: "Failed to get leaderboards"});
         }
         this.setState({ loading: false });
     }
@@ -59,6 +60,9 @@ class HomeMostPlayedGame extends React.Component {
                     <Spinner type="border" style={{width: "26px", height: "26px"}} />
                 </div>
             )
+        }
+        if(!this.state.game) {
+            return null;
         }
         return (
             <div style={{padding: "32px"}}>

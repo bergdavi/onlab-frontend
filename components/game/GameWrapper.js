@@ -68,8 +68,7 @@ class GameWrapper extends React.Component {
             this.client.deactivate();
         } else {
             this.client = new Client();
-        }        
-        // TODO server prefix?
+        }
         this.client.brokerURL = `${Constants.api.webSocketProtocol}://${window.location.host}${Constants.api.webSocketPrefix}/gameplay`;
         this.client.activate();
         this.client.onConnect = () => {
@@ -88,7 +87,6 @@ class GameWrapper extends React.Component {
                             case 'invalid_user':
                                 this.showAlert('warning', 'It is not your turn, please wait!', 3);
                                 break;
-                            // TODO this should be game over
                             case 'finished':
                                 this.showAlert('warning', 'The game is over', 3);
                                 break;
@@ -169,8 +167,10 @@ class GameWrapper extends React.Component {
                     <UserContextWrapper><UserGameplayList selectedGameplayId={this.props.gameplayId}/></UserContextWrapper>
                 </Col>
                 <Col>
+                    <div style={{maxWidth: "700px", margin: "auto"}}>
                     {this.renderAlert()}
                     <GameComponent gameState={this.state.gameState} userIdx={this.state.userIdx} sendTurn={this.sendTurn} style={{width: "100%", height: "100%"}}></GameComponent>
+                    </div>
                 </Col>
                 <Col xs="3">
                     <GameplaySidebar gameplay={this.state.gameplay} />

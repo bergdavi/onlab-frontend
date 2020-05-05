@@ -15,7 +15,7 @@ class GameItem extends React.Component {
         let game = this.props.game;
             
         return (    
-            <Card style={{width: this.width, margin: "10px"}}>
+            <Card style={{width: this.width, margin: "10px", cursor: "pointer"}}>
                 <CardImg top src={`/${game.id}.png`} style={{width: this.width, height: `calc(${this.width} / 2)`, objectFit: "contain"}} />
                 <CardBody style={{padding: "5px"}}>
                     <CardTitle style={{fontSize: "25px", fontWeight: "bold", marginBottom: "0px"}}>{game.name}</CardTitle>

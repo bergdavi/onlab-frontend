@@ -7,9 +7,7 @@ import {
     Form,
     FormGroup,
     Label,
-    Input,
-    NavbarText,
-    Spinner
+    Input
 } from 'reactstrap';
 import Constants from '../util/constants';
 
@@ -22,6 +20,7 @@ class RegisterModal extends React.Component {
             registerEmailInput: '',
             registerPasswordInput: '',
             registerRepeatPasswordInput: '',
+            registerIsAdminInput: false
         };
     }
 
@@ -30,7 +29,8 @@ class RegisterModal extends React.Component {
             registerUsernameInput: '',
             registerEmailInput: '',
             registerPasswordInput: '',
-            registerRepeatPasswordInput: ''
+            registerRepeatPasswordInput: '',
+            registerIsAdminInput: false
         });
         this.props.toggle();
     }
@@ -40,7 +40,8 @@ class RegisterModal extends React.Component {
         const data = JSON.stringify({
             username: this.state.registerUsernameInput,
             email: this.state.registerEmailInput,
-            password: this.state.registerPasswordInput
+            password: this.state.registerPasswordInput,
+            userType: this.state.registerIsAdminInput ? 'admin' : 'user'
         });
         const res = await fetch(`${Constants.api.pathPrefix}/users/register`, {
             method: "POST",
@@ -76,6 +77,16 @@ class RegisterModal extends React.Component {
                             <Label for="registerRepeatPassword">Repeat Password</Label>
                             <Input type="password" onChange={(e) => this.setState({registerRepeatPasswordInput: e.target.value})} value={this.state.registerRepeatPasswordInput} name="password" id="registerRepeatPassword" placeholder="Repeat password" />
                         </FormGroup>
+                        {this.props.admin ?
+                        <FormGroup check>
+                            <Label check for="registerIsAdmin">
+                                <Input type="checkbox" onChange={(e) => this.setState({registerIsAdminInput: e.target.value})} value={this.state.registerIsAdminInput} name="isAdmin" id="registerIsAdmin" />
+                                Admin
+                            </Label>
+                        </FormGroup>
+                         :
+                        ""
+                        }
                         <Button color="primary" type="submit">Register</Button>
                     </Form>
                 </ModalBody>

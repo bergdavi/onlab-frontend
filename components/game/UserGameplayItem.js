@@ -8,14 +8,12 @@ class UserGameplayItem extends React.Component {
 
     onItemClick = () => {
         let gameplayId = this.props.userGameplay.gameplay.id;
-        // Router.push(`/gameplays`, `/gameplays?gameplayId=${gameplayId}`, {shallow: true});
         Router.push(`/gameplays?gameplayId=${gameplayId}`, `/gameplays?gameplayId=${gameplayId}`, {shallow: true});
     }
 
     mapUserToName = (user) => {
         let nextTurnUser = this.props.userGameplay.gameplay.nextTurn;
-        // TODO find a better way to seperate usernames
-        let displayUsername = user.username + " "; // Added space to seperate usernames
+        let displayUsername = user.username + " "; // Added space to separate usernames
         return displayUsername;
     }
 
