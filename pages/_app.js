@@ -22,24 +22,18 @@ class MyApp extends App {
     }
 
     updateUser = (user) => {
-        localStorage.setItem('user', JSON.stringify(user));
         this.setState({user: user});
     }
 
     refreshUser = async () => {
-        let user = JSON.parse(localStorage.getItem('user'));
-        // TODO improve user handling
-        if(false && Cookies.get('checkedLogin') && typeof user === 'object' && user) {
-            this.updateUser(JSON.parse(localStorage.getItem('user')));
+        const res = await fetch(`${Constants.api.pathPrefix}/users/current`);
+        if(res.status === 200) {
+            const user = await res.json();
+            this.updateUser(user);
         } else {
-            const res = await fetch(`${Constants.api.pathPrefix}/users/current`);
-            if(res.status === 200) {
-                const user = await res.json();
-                this.updateUser(user);
-            } else {
-                this.updateUser(null);
-            }
+            this.updateUser(null);
         }
+        
         Cookies.set('checkedLogin', 1);
     }
 
@@ -61,7 +55,9 @@ class MyApp extends App {
                         <NavBar />
                     </UserContextWrapper>
                     <ErrorList></ErrorList>
-                    <NotificationList />
+                    <UserContextWrapper>
+                        <NotificationList />
+                    </UserContextWrapper>
                 </header>
                 <Component {...pageProps} {...this.state}/>
             </UserContext.Provider>

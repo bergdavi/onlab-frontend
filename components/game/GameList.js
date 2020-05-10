@@ -13,7 +13,8 @@ class GameList extends React.Component {
         super(props);
         this.state = {
             loading: true,
-            games: []
+            games: [],
+            modalOpen: false
         }
     }
 
@@ -36,6 +37,10 @@ class GameList extends React.Component {
         this.setState({selectGame: idx});
     }
 
+    toggleModal = () => {
+        this.setState({selectGame: undefined});
+    }
+
     render() {
         if(this.state.loading) {
             return (
@@ -47,7 +52,7 @@ class GameList extends React.Component {
         return(
             <div style={{display: "flex", flexWrap: "wrap", justifyContent: "center"}}>
                 {this.state.games.map((g, idx) => <div onClick={() => this.selectGame(idx)}><GameItem game={g} /></div>)}
-                {this.state.selectGame !== undefined ? <SelectedGame game={this.state.games[this.state.selectGame]} /> : ""}                
+                <SelectedGame game={this.state.games[this.state.selectGame]} open={typeof this.state.selectGame !== 'undefined'} toggle={this.toggleModal} />
             </div>
         );
     }

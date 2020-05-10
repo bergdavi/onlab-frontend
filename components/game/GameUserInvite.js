@@ -12,6 +12,7 @@ class GameUserInvite extends React.Component {
         super(props);
         this.state = {
             isLoading: false,
+            inviteLoading: false,
             searchInput: "",
             searchUsers: [],
             inviteUsers: []
@@ -34,16 +35,17 @@ class GameUserInvite extends React.Component {
         if(!this.state.inviteUsers.some((u) => u.id === user.id)) {
             let inviteUsers = this.state.inviteUsers;
             inviteUsers.push(user);
-            this.setState({inviteUsers});
+            this.setState({inviteUsers, sentInvite: false});
         }
     }
 
     removeUser = (user) => {
         let inviteUsers = this.state.inviteUsers.filter((u) => u.id !== user.id);
-        this.setState({inviteUsers});
+        this.setState({inviteUsers, sentInvite: false});
     }
 
     sendInvite = async () => {
+        this.setState({inviteLoading: true});
         let data = JSON.stringify(this.state.inviteUsers.map((u) => u.id));
         const res = await fetch(`${Constants.api.pathPrefix}/games/${this.props.game.id}/invite`, {
             method: "POST",
@@ -53,7 +55,7 @@ class GameUserInvite extends React.Component {
             body: data
         });
         if(res.status === 200) {
-            this.setState({sentInvite: true});
+            this.setState({sentInvite: true, inviteLoading: false});
         }
     }
 
@@ -71,6 +73,8 @@ class GameUserInvite extends React.Component {
             inviteButton = <Button color="secondary" disabled style={{width: "100%", position: "absolute", bottom: "0"}}>Not enough players</Button>
         } else if(this.state.sentInvite) {
             inviteButton = <Button color="success" disabled style={{width: "100%", position: "absolute", bottom: "0"}}>Invite sent</Button>
+        } else if(this.state.inviteLoading) {
+            inviteButton = <Button color="primary" disabled style={{width: "100%", position: "absolute", bottom: "0"}}><Spinner type="border" style={{width: "26px", height: "26px"}} /></Button>
         } else {
             inviteButton = <Button color="primary" onClick={this.sendInvite} style={{width: "100%", position: "absolute", bottom: "0"}}>Send invite</Button>
         }

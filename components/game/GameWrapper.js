@@ -54,7 +54,9 @@ class GameWrapper extends React.Component {
     }
 
     componentWillUnmount() {
-        this.client.deactivate();
+        if(this.client) {
+            this.client.deactivate();
+        }
     }
 
     async componentDidUpdate(previousProps) {

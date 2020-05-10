@@ -222,7 +222,7 @@ export default class Chess extends React.Component {
                 </Modal>
                 <canvas ref="canvas" width={400} height={400} style={{height: "100%", width: "100%", objectFit: "contain"}}></canvas>
                 <Button color="danger" onClick={this.sendForfeit}>Forfeit</Button>
-                <Button color="secondary" onClick={this.sendOfferDraw}>Offer draw</Button>
+                <Button color="secondary" onClick={this.sendOfferDraw} style={{marginLeft: "10px"}}>Offer draw</Button>
             </div>
         );
     }

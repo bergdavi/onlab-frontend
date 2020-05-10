@@ -9,7 +9,7 @@ class ErrorList extends React.Component {
         this.state = {errors: []};
     }
 
-    componentWillMount() {
+    componentDidMount() {
         ErrorHandler.subscribe((error) => {
             let errors = this.state.errors;
             errors.push(error);

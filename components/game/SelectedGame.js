@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-    Card, Row, CardImg, CardBody, CardTitle, CardText, Button, Col
+    Card, Row, CardImg, CardBody, CardTitle, CardText, Button, Col, Modal, ModalBody, ModalHeader, Spinner
 } from 'reactstrap';
 import Router from 'next/router';
 import Constants from '../util/constants'
@@ -11,16 +11,11 @@ class SelectedGame extends React.Component {
 
     constructor(props) {
         super(props);
-        this.state = {};
-    }
-
-    componentDidUpdate(previousProps) {
-        if(previousProps && previousProps.game && this.props.game.id !== previousProps.game.id) {
-            this.setState({queuePlace: undefined});
-        }
+        this.state = {joinLoading: false};
     }
 
     onJoinQueue = async () => {
+        this.setState({joinLoading: true});
         const res = await fetch(`${Constants.api.pathPrefix}/games/${this.props.game.id}/queue`, {
             method: "POST",
             headers: {
@@ -29,10 +24,15 @@ class SelectedGame extends React.Component {
         });
         if(res.status === 200) {
             const queuePlace = await res.text();
-            this.setState({queuePlace: queuePlace});
+            this.setState({queuePlace: queuePlace, joinLoading: false});
         } else {
             ErrorHandler.sendError({message: "Failed to join game queue"});
         }
+    }
+
+    toggle = () => {
+        this.props.toggle();
+        this.setState({queuePlace: undefined, joinLoading: false});
     }
 
     render() {
@@ -45,12 +45,16 @@ class SelectedGame extends React.Component {
         let joinQueueButton = null;
         if(this.state.queuePlace) {
             joinQueueButton = <Button color="success" disabled style={{width: "100%", position: "absolute", bottom: 0}}>Place in queue: {this.state.queuePlace}</Button>;
+        } else if(this.state.joinLoading) {
+            joinQueueButton = <Button color="primary" disabled style={{width: "100%", position: "absolute", bottom: 0}}><Spinner type="border" style={{width: "26px", height: "26px"}} /></Button>;
         } else {
             joinQueueButton = <Button color="primary" onClick={this.onJoinQueue} style={{width: "100%", position: "absolute", bottom: 0}}>Join game queue</Button>;
         }
             
         return (
-            <div style={{width: "100%", height: "250px", backgroundColor: "lightGray", padding: "25px"}}>
+            <Modal isOpen={this.props.open} toggle={this.toggle} size="lg">
+                <ModalHeader toggle={this.toggle}>Join game</ModalHeader>
+                <ModalBody>
                 <Row style={{height: "100%"}}>
                     <Col style={{height: "100%"}}>
                         <img src={`/${game.id}.png`} style={{width: "100%", height: "100%", objectFit: "contain"}}></img>
@@ -70,8 +74,9 @@ class SelectedGame extends React.Component {
                     <Col>
                         <GameUserInvite game={game}/>
                     </Col>
-                </Row>
-            </div>
+                    </Row>
+                </ModalBody>
+            </Modal>            
         );        
     }
 }

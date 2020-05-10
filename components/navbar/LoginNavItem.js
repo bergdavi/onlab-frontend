@@ -58,9 +58,11 @@ class LoginNavItem extends React.Component {
         let loginButton;
         let registerButton;
         let loginText;
+        let loadingUser;
 
-
-        if(this.props.user) {
+        if(typeof this.props.user === "undefined") {
+            loadingUser = <Spinner type="border" style={{width: "26px", height: "26px"}} />
+        } else if(this.props.user) {
             loginButton = <Button onClick={this.submitLogout} color="danger" style={{marginRight: "15px"}}>Logout</Button>
             loginText = `Logged in as ${this.getUserDetails().username}`;
         } else {
@@ -72,6 +74,7 @@ class LoginNavItem extends React.Component {
         return (
             <div>
                 <NavbarText style={{marginRight: "15px"}}>{loginText}</NavbarText>
+                {loadingUser}
                 {loginButton}
                 {registerButton}
                 <UserContextWrapper>
