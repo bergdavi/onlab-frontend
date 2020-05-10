@@ -47,7 +47,7 @@ class MyApp extends App {
         return (
             <UserContext.Provider value={{user: this.state.user, updateUser: this.updateUser, refreshUser: this.refreshUser}}>
                 <Head>
-                    <title>Create Next App</title>
+                    <title>Play!</title>
                     <link rel="icon" href="/favicon.ico" />
                 </Head>
                 <header>
