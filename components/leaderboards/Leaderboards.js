@@ -71,7 +71,7 @@ class Leaderboards extends React.Component {
                     <Label for="selectGame">Select game</Label>
                     <Input type="select" name="select" id="selectGame" onChange={this.selectChanged}>
                         <option value="ALL">All</option>
-                        {this.state.games.map((g) => (<option value={g.id}>{g.name}</option>))}
+                        {this.state.games.map((g) => (<option value={g.id} key={g.id}>{g.name}</option>))}
                     </Input>
                 </FormGroup>
                 {

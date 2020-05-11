@@ -70,13 +70,13 @@ class UserSearch extends React.Component {
     render() {            
         return (
             <div>
-                <Input type="search" id="usernameInput" placeholder="Search for user" autoComplete="off" onChange={(e) => this.onInputChanged(e.target.value)} value={this.state.searchInput}></Input>
+                <Input type="search" autoComplete="username" id="usernameInput" placeholder="Search for user" autoComplete="off" onChange={(e) => this.onInputChanged(e.target.value)} value={this.state.searchInput}></Input>
                 <ListGroup style={{position: "absolute", width: "100%"}}>
                     {
                         this.state.isLoading ?
                         <ListGroupItem><Spinner style={{width: "22px", height: "22px"}}></Spinner></ListGroupItem>
                         :
-                        this.state.searchUsers.map((user) => <ListGroupItem>{user.username}<Button color="primary" onClick={() => this.onButtonClick(user)} style={{float: "right", height: "25px", paddingTop: "0", paddingBottom: "0"}}>{this.props.btnText}</Button></ListGroupItem>)
+                        this.state.searchUsers.map((user) => <ListGroupItem key={user.id}>{user.username}<Button color="primary" onClick={() => this.onButtonClick(user)} style={{float: "right", height: "25px", paddingTop: "0", paddingBottom: "0"}}>{this.props.btnText}</Button></ListGroupItem>)
                     }                    
                 </ListGroup>
             </div>

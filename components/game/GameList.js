@@ -51,7 +51,7 @@ class GameList extends React.Component {
         }
         return(
             <div style={{display: "flex", flexWrap: "wrap", justifyContent: "center"}}>
-                {this.state.games.map((g, idx) => <div onClick={() => this.selectGame(idx)}><GameItem game={g} /></div>)}
+                {this.state.games.map((g, idx) => <div onClick={() => this.selectGame(idx)} key={g.id}><GameItem game={g} /></div>)}
                 <SelectedGame game={this.state.games[this.state.selectGame]} open={typeof this.state.selectGame !== 'undefined'} toggle={this.toggleModal} />
             </div>
         );

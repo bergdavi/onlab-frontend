@@ -1,4 +1,5 @@
 import React from 'react';
+import { Spinner } from 'reactstrap';
 import UserGameplayItem from './UserGameplayItem'
 import Constants from '../util/constants'
 import ErrorHandler from '../util/errorHandler';
@@ -23,11 +24,15 @@ class UserGameplayList extends React.Component {
 
     render() {
         if(!this.state.gameplays) {
-            return <h1>Loading...</h1>
+            return (
+                <div align="center" style={{ margin: "10px" }}>
+                    <Spinner type="border" style={{ width: "26px", height: "26px" }} />
+                </div>
+            )
         }
         let gameplays = this.state.gameplays.filter(gameplay => gameplay.gameplay.status === "in_progress").map((gameplay) => {
             return (
-                <div>
+                <div key={gameplay.gameplay.id}>
                     <div className="userGameplayItem">
                         <UserGameplayItem userGameplay={gameplay} selected={gameplay.gameplay.id === this.props.selectedGameplayId}/>
                     </div>

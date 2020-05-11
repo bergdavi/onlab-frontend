@@ -18,8 +18,10 @@ class ErrorList extends React.Component {
     }
 
     render() {
-        return (    
-            this.state.errors.map(error => (<ErrorItem error={error}></ErrorItem>))
+        return (
+            <div style={{position: "absolute", width: "100%"}}>
+                {this.state.errors.map(error => (<ErrorItem error={error}></ErrorItem>))}
+            </div>
         );
     }
 }

@@ -34,7 +34,7 @@ class UserGameplayList extends React.Component {
         }
         let gameplays = this.state.gameplays.map((gameplay) => {
             return (
-                <div key={gameplay.id}>
+                <div key={gameplay.gameplay.id}>
                     <div className="userGameplayItem">
                         <UserGameplayItem userGameplay={gameplay} />
                     </div>

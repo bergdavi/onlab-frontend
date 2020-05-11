@@ -1,8 +1,4 @@
 import React from 'react';
-import {
-    Card, Row
-} from 'reactstrap';
-import Router from 'next/router';
 
 import UserSideBarItem from './UserSideBarItem';
 
@@ -20,7 +16,7 @@ class UserSideBar extends React.Component {
     render() {
         let gameplays = this.menuItems.map((item) => {
             return (
-                <div>
+                <div key={item.id}>
                     <div className="userSideBarItem">
                         <UserSideBarItem item={item} selected={item.id === this.props.selected}/>
                     </div>

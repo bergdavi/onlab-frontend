@@ -63,19 +63,19 @@ class RegisterModal extends React.Component {
                     <Form id="registerForm" onSubmit={this.submitRegister}>
                         <FormGroup>
                             <Label for="registerUsername">Username</Label>
-                            <Input type="text" onChange={(e) => this.setState({registerUsernameInput: e.target.value})} value={this.state.registerUsernameInput} name="username" id="registerUsername" placeholder="Username" />
+                            <Input autoComplete="username" type="text" onChange={(e) => this.setState({registerUsernameInput: e.target.value})} value={this.state.registerUsernameInput} name="username" id="registerUsername" placeholder="Username" />
                         </FormGroup>
                         <FormGroup>
                             <Label for="registerEmail">Email address</Label>
-                            <Input type="text" onChange={(e) => this.setState({registerEmailInput: e.target.value})} value={this.state.registerEmailInput} name="email" id="registerEmail" placeholder="Email address" />
+                            <Input autoComplete="email" type="text" onChange={(e) => this.setState({registerEmailInput: e.target.value})} value={this.state.registerEmailInput} name="email" id="registerEmail" placeholder="Email address" />
                         </FormGroup>
                         <FormGroup>
                             <Label for="registerPassword">Password</Label>
-                            <Input type="password" onChange={(e) => this.setState({registerPasswordInput: e.target.value})} value={this.state.registerPasswordInput} name="password" id="registerPassword" placeholder="Password" />
+                            <Input autoComplete="password" type="password" onChange={(e) => this.setState({registerPasswordInput: e.target.value})} value={this.state.registerPasswordInput} name="password" id="registerPassword" placeholder="Password" />
                         </FormGroup>
                         <FormGroup>
                             <Label for="registerRepeatPassword">Repeat Password</Label>
-                            <Input type="password" onChange={(e) => this.setState({registerRepeatPasswordInput: e.target.value})} value={this.state.registerRepeatPasswordInput} name="password" id="registerRepeatPassword" placeholder="Repeat password" />
+                            <Input autoComplete="repeat-password" type="password" onChange={(e) => this.setState({registerRepeatPasswordInput: e.target.value})} value={this.state.registerRepeatPasswordInput} name="password" id="registerRepeatPassword" placeholder="Repeat password" />
                         </FormGroup>
                         {this.props.admin ?
                         <FormGroup check>

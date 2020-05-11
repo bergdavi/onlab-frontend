@@ -34,7 +34,7 @@ class GameplaySidebar extends React.Component {
                 </div>
                 <div>
                     <h1>Players</h1>
-                    {gameplay.users.map(user => (<h2>{user.username}</h2>))}
+                    {gameplay.users.map(user => (<h2 key={user.id}>{user.username}</h2>))}
                 </div>
                 <style jsx>{`
                     h1 {
