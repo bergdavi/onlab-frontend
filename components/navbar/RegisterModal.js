@@ -7,7 +7,8 @@ import {
     Form,
     FormGroup,
     Label,
-    Input
+    Input,
+    FormFeedback
 } from 'reactstrap';
 import Constants from '../util/constants';
 
@@ -37,6 +38,9 @@ class RegisterModal extends React.Component {
 
     submitRegister = async (e) => {
         e.preventDefault();
+        if(this.state.registerPasswordInput !== this.state.registerRepeatPasswordInput) {
+            return;
+        }
         const data = JSON.stringify({
             username: this.state.registerUsernameInput,
             email: this.state.registerEmailInput,
@@ -52,6 +56,8 @@ class RegisterModal extends React.Component {
         });
         if(res.status === 200) {
             this.toggle();
+        } else {
+
         }
     }
 
@@ -63,19 +69,21 @@ class RegisterModal extends React.Component {
                     <Form id="registerForm" onSubmit={this.submitRegister}>
                         <FormGroup>
                             <Label for="registerUsername">Username</Label>
-                            <Input autoComplete="username" type="text" onChange={(e) => this.setState({registerUsernameInput: e.target.value})} value={this.state.registerUsernameInput} name="username" id="registerUsername" placeholder="Username" />
+                            <Input autoComplete="username" type="text" required onChange={(e) => this.setState({registerUsernameInput: e.target.value})} value={this.state.registerUsernameInput} name="username" id="registerUsername" placeholder="Username" />
                         </FormGroup>
                         <FormGroup>
                             <Label for="registerEmail">Email address</Label>
-                            <Input autoComplete="email" type="text" onChange={(e) => this.setState({registerEmailInput: e.target.value})} value={this.state.registerEmailInput} name="email" id="registerEmail" placeholder="Email address" />
+                            <Input autoComplete="email" type="email" required onChange={(e) => this.setState({registerEmailInput: e.target.value})} value={this.state.registerEmailInput} name="email" id="registerEmail" placeholder="Email address" />
+                            
                         </FormGroup>
                         <FormGroup>
                             <Label for="registerPassword">Password</Label>
-                            <Input autoComplete="password" type="password" onChange={(e) => this.setState({registerPasswordInput: e.target.value})} value={this.state.registerPasswordInput} name="password" id="registerPassword" placeholder="Password" />
+                            <Input autoComplete="password" type="password" required onChange={(e) => this.setState({registerPasswordInput: e.target.value})} value={this.state.registerPasswordInput} name="password" id="registerPassword" placeholder="Password" />
                         </FormGroup>
                         <FormGroup>
                             <Label for="registerRepeatPassword">Repeat Password</Label>
-                            <Input autoComplete="repeat-password" type="password" onChange={(e) => this.setState({registerRepeatPasswordInput: e.target.value})} value={this.state.registerRepeatPasswordInput} name="password" id="registerRepeatPassword" placeholder="Repeat password" />
+                            <Input invalid={this.state.registerPasswordInput !== this.state.registerRepeatPasswordInput} autoComplete="repeat-password" type="password" required onChange={(e) => this.setState({registerRepeatPasswordInput: e.target.value})} value={this.state.registerRepeatPasswordInput} name="password" id="registerRepeatPassword" placeholder="Repeat password" />
+                            <FormFeedback>Passwords must match!</FormFeedback>
                         </FormGroup>
                         {this.props.admin ?
                         <FormGroup check>
